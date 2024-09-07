@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/RavenCameraFX/dependencies/Assembly-CSharp-firstpass.dll
+/RavenCameraFX/dependencies/UnityEngine.IMGUIModule.dll
+/RavenCameraFX/dependencies/UnityEngine.UI.dll

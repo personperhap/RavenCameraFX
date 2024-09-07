@@ -40,5 +40,14 @@ namespace RavenCameraFX
             }
             return y;
         }
+
+        public void ChangeArgs(float f, float z, float r)
+        {
+            k1 = z / (PI * f);
+            k2 = 1 / ((2 * PI * f) * (2 * PI * f));
+            k3 = r * z / (2 * PI * f);
+
+            T_crit = 0.8f * (Mathf.Sqrt(4 * k2 + k1 * k1) - k1);
+        }
     }
 }
