@@ -16,6 +16,9 @@ namespace RavenCameraFX
     public class Settings
     {
 
+        [SettingAttribute("Viewmodel Flip", "Misc", MaxVal = 1, round = 1)]
+        public float viewmodelFlip { get; set; } = 1f;
+
         [SettingAttribute("Camera Bob Intensity", "Misc", MaxVal = 2)]
         public float cameraBobIntensity { get; set; } = 1.7f;
         //camera leaning

@@ -12,8 +12,6 @@ using HarmonyLib;
 
 using RavenCameraFX;
 
-using Cinemachine;
-
 namespace RavenCameraFX
 {
     [BepInPlugin("com.personperhaps.ravenimpactfx", "ravenimpactfx", "1.3")]
@@ -46,6 +44,8 @@ namespace RavenCameraFX
             foreach (PropertyInfo field in fields)
             {
                 SettingAttribute attribute = field.GetCustomAttribute(typeof(SettingAttribute)) as SettingAttribute;
+                attribute.Changed = false;
+                attribute.LastValue = (float)field.GetValue(settings);
                 Config.Bind(attribute.Category, attribute.Name, (float)field.GetValue(settings));
             }
         }
@@ -104,6 +104,11 @@ namespace RavenCameraFX
             return 0;
         }
 
+        public Vector3 ViewmodelFlip()
+        {
+            return new Vector3(Mathf.Lerp(1, -1, settings.viewmodelFlip), 1, 1);
+        }
+        
         //------------------------------------------------------------------------------------------------------------------------------------------------
 
         public float cameraLean = 0;
@@ -292,7 +297,7 @@ namespace RavenCameraFX
 
         static public Vector3 averageDelta = Vector3.zero;
 
-        static public SecondOrder shakeCoil = new SecondOrder(2f, 0.2f, 0.05f, Vector3.zero);
+        static public SecondOrder shakeCoil = new SecondOrder(1f, 0.2f, 0.05f, Vector3.zero);
         public Vector3 ProceduralCameraShake()
         {
             try
@@ -496,6 +501,8 @@ namespace RavenCameraFX
 
                 __instance.weaponParent.transform.localPosition += plugin.WeaponPushback();
 
+                __instance.weaponParent.localScale = plugin.ViewmodelFlip();
+
                 plugin.UpdateCameraPhysicalMovement();
 
                 plugin.recoilControl = Mathf.MoveTowards(plugin.recoilControl, 1, 0.1f * plugin.DeltaTime());
@@ -584,10 +591,28 @@ namespace RavenCameraFX
 
                     
 
-                    float fieldValue = Mathf.Round((float)field.GetValue(settings) * 100) / 100;
+                    float fieldValue = Mathf.Round((float)field.GetValue(settings) * (1 / attribute.round)) / ( 1 / attribute.round);
 
-                    GUILayout.Label(attribute.Name + ": "+ fieldValue);
+                    if (attribute.LastValue != fieldValue)
+                    {
+                        attribute.Changed = true;
+                    }
+
+
+                    if (attribute.Changed)
+                    {
+                        GUILayout.Label("<color=red>" + attribute.Name + ": " + fieldValue + "</color>");
+                    }
+                    else
+                    {
+                        GUILayout.Label(attribute.Name + ": " + fieldValue);
+                    }
+
+                    
+
                     field.SetValue(settings, GUILayout.HorizontalSlider(fieldValue, 0, attribute.MaxVal));
+
+                    attribute.LastValue = fieldValue;
 
                     GUILayout.FlexibleSpace();
                 }
@@ -607,9 +632,16 @@ namespace RavenCameraFX
     public class SettingAttribute : System.Attribute
     {
         public string Name;
+
         public float MaxVal;
 
+        public float LastValue;
+
+        public float round;
+
         public string Category;
+
+        public bool Changed;
 
         public SettingAttribute(string name, string category)
         {
@@ -617,6 +649,9 @@ namespace RavenCameraFX
             Name = name;
             Category = category;
             MaxVal = 1f;
+            round = 0.01f;
+            Changed = false;
+            LastValue = 0f;
         }
     }
 }

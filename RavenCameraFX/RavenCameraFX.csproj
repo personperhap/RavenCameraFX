@@ -34,11 +34,6 @@
       <HintPath>dependencies\BepInEx.Harmony.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="Cinemachine">
-      <HintPath>dependencies\Cinemachine.dll</HintPath>
-      <Private>false</Private>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-    </Reference>
     <Reference Include="netstandard">
       <HintPath>dependencies\netstandard.dll</HintPath>
       <Private>false</Private>
@@ -63,11 +58,6 @@
       <HintPath>C:\Users\Kevin\source\repos\RavenImprovements\references\UnityEngine.UI.dll</HintPath>
       <Private>false</Private>
     </Reference>
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <EmbeddedResource Include="dependencies\Cinemachine.dll" />
   </ItemGroup>
 
 </Project>
