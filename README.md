@@ -6,3 +6,5 @@ snappier, punchier, and adds a little more movement to first person camera and w
 comes with some misc options too
 
 lots of config, all acccessible ingame in the game options (with saving!)
+
+![](https://github.com/personperhap/RavenCameraFX/blob/master/recoil.gif)
